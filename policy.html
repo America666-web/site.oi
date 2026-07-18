@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Документ — SiteMarket</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<meta name="robots" content="noindex">
+</head>
+<body class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><img src="logo.png" alt="SiteMarket" width="32" height="32" loading="eager" decoding="async"> Site<span class="dot">Market</span></a>
+  </div>
+</header>
+
+<main class="container" style="max-width:760px;margin:40px auto;padding:0 20px 60px;">
+  <div class="auth-card" style="max-width:none;">
+    <div id="sm-policy-content">Загрузка…</div>
+  </div>
+</main>
+
+<script src="storage.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const params = new URLSearchParams(window.location.search);
+  const type = params.get('type') || 'userTerms';
+  const policies = smGetPolicies();
+  const titles = {
+    userTerms: 'Пользовательское соглашение',
+    authorTerms: 'Соглашение соавтора',
+    purchase: 'Политика покупки'
+  };
+  document.title = (titles[type] || 'Документ') + ' — SiteMarket';
+  const content = policies[type] || '<p>Документ не найден.</p>';
+  document.getElementById('sm-policy-content').innerHTML = content;
+});
+</script>
+</body>
+</html>

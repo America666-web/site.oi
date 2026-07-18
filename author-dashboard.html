@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Панель соавтора — SiteMarket</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><img src="logo.png" alt="SiteMarket" width="32" height="32" loading="eager" decoding="async"> Site<span class="dot">Market</span></a>
+    <nav class="nav" id="sm-nav"></nav>
+  </div>
+</header>
+
+<main class="main">
+  <div class="admin-shell">
+
+    <aside class="admin-side">
+      <h3>Панель соавтора</h3>
+      <button class="btn btn-primary btn-block" id="sm-open-modal">+ Добавить сайт</button>
+      <button class="btn btn-block" id="sm-show-my-sites">📂 Мои сайты</button>
+      <button class="btn btn-block" id="sm-show-stats">📊 Статистика</button>
+      <hr style="border-color:var(--border);margin:12px 0;">
+      <a href="index.html" class="btn btn-block">Смотреть витрину</a>
+    </aside>
+
+    <section class="admin-main">
+      <div class="eyebrow">Панель соавтора</div>
+      <h2 id="sm-dashboard-title">Мои сайты</h2>
+
+      <!-- Фильтры по статусу -->
+      <div class="filters" id="sm-author-filters">
+        <button class="chip active" data-filter="all">Все</button>
+        <button class="chip" data-filter="pending">На модерации</button>
+        <button class="chip" data-filter="approved">Опубликованы</button>
+        <button class="chip" data-filter="rejected">Отклонены</button>
+        <button class="chip" data-filter="sold">Проданы</button>
+      </div>
+
+      <!-- Список сайтов -->
+      <div class="grid" id="sm-author-sites"></div>
+
+      <!-- Блок статистики (скрыт по умолчанию) -->
+      <div id="sm-author-stats" style="display:none;">
+        <div class="admin-stats" style="grid-template-columns: repeat(4, 1fr);">
+          <div class="admin-stat"><b id="stat-total-sites">0</b><span>Всего сайтов</span></div>
+          <div class="admin-stat"><b id="stat-pending">0</b><span>На модерации</span></div>
+          <div class="admin-stat"><b id="stat-sold">0</b><span>Продано</span></div>
+          <div class="admin-stat"><b id="stat-earnings">0 ₽</b><span>Заработано</span></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Модалка добавления сайта (аналогична админской, но без модерации) -->
+<div class="modal-backdrop" id="sm-modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" id="sm-close-modal">&times;</button>
+    <h3 id="sm-modal-title">Новый сайт</h3>
+    <form id="sm-add-form">
+      <input type="hidden" id="f-edit-id" value="">
+      <div class="field">
+        <label>Фото сайта (не обязательно)</label>
+        <div class="upload-box">
+          <div class="upload-preview" id="sm-upload-preview"></div>
+          <div class="upload-actions">
+            <input type="file" id="f-image" accept="image/*">
+            <div class="upload-status" id="sm-upload-status"></div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>ZIP-архив с сайтом</label>
+        <div style="font-size:12px;color:var(--text-faint);margin-bottom:6px;">Максимум 700 КБ (архив со всеми файлами сайта в ZIP)</div>
+        <div class="upload-box" style="flex-direction:column;align-items:stretch;">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <input type="file" id="f-zip" accept=".zip">
+            <span id="sm-zip-filename" style="font-size:13px;color:var(--text-faint);"></span>
+          </div>
+          <div class="upload-status" id="sm-zip-status"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-title">Название</label>
+        <input id="f-title" type="text" required placeholder="Например: Лендинг «Барбершоп»">
+      </div>
+      <div class="field">
+        <label for="f-category">Категория</label>
+        <select id="f-category">
+          <option value="Лендинг">Лендинг</option>
+          <option value="Магазин">Магазин</option>
+          <option value="Портфолио">Портфолио</option>
+          <option value="Бизнес">Бизнес</option>
+          <option value="Блог">Блог</option>
+          <option value="Другое">Другое</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-price">Цена, ₽</label>
+        <input id="f-price" type="number" min="0" step="100" required placeholder="4900">
+      </div>
+      <div class="field">
+        <label for="f-badge">Метка</label>
+        <select id="f-badge">
+          <option value="">Нет</option>
+          <option value="Хит">Хит 🔥</option>
+          <option value="Популярное">Популярное ⭐</option>
+          <option value="VIP">VIP 💎</option>
+          <option value="Новинка">Новинка 🆕</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-desc">Короткое описание</label>
+        <textarea id="f-desc" placeholder="Показывается на карточке в каталоге"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-details">Подробности</label>
+        <textarea id="f-details" placeholder="Что входит, какие разделы..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Отправить на модерацию</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="storage.js"></script>
+<script src="firebase-sync.js"></script>
+<script src="auth.js"></script>
+<script src="upload.js"></script>
+<script src="sitecrypt.js"></script>
+<script src="zipviewer.js"></script>
+<script src="app.js"></script>
+<script src="author-dashboard.js"></script>
+</body>
+</html>

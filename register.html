@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Регистрация — SiteMarket</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><img src="logo.png" alt="SiteMarket" width="32" height="32" loading="eager" decoding="async"> Site<span class="dot">Market</span></a>
+    <nav class="nav" id="sm-nav"></nav>
+  </div>
+</header>
+
+<main class="main auth-wrap">
+  <div class="auth-card">
+    <h1>Создать аккаунт</h1>
+    <p class="auth-sub">Регистрация займёт меньше минуты</p>
+
+    <div id="sm-msg" class="form-msg error"></div>
+
+    <form id="sm-reg-form">
+      <div class="field">
+        <label for="f-name">Имя</label>
+        <input id="f-name" type="text" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input id="f-email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="f-pass">Пароль</label>
+        <input id="f-pass" type="password" autocomplete="new-password" minlength="4" required>
+      </div>
+      <div class="field">
+        <label for="f-pass2">Повторите пароль</label>
+        <input id="f-pass2" type="password" autocomplete="new-password" minlength="4" required>
+      </div>
+      <div class="field" style="display:flex;align-items:flex-start;gap:8px;">
+        <input type="checkbox" id="f-agree-terms" style="margin-top:3px;width:auto;">
+        <label for="f-agree-terms" style="font-size:13px;font-weight:400;">Я принимаю <a href="policy.html?type=userTerms" target="_blank" style="color:var(--orange-2);">Пользовательское соглашение</a></label>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+    </form>
+
+    <p class="auth-foot">Уже есть аккаунт? <a href="login.html">Войти</a></p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 <span class="orange">SiteMarket</span></span>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="storage.js"></script>
+<script src="firebase-sync.js"></script>
+<script src="auth.js"></script>
+<script src="app.js"></script>
+<script src="particles.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    smRenderNav('register');
+
+    document.getElementById('sm-reg-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('f-name').value;
+      const email = document.getElementById('f-email').value;
+      const pass = document.getElementById('f-pass').value;
+      const pass2 = document.getElementById('f-pass2').value;
+      const msg = document.getElementById('sm-msg');
+
+      if (pass !== pass2) {
+        msg.textContent = 'Пароли не совпадают.';
+        msg.className = 'form-msg error show';
+        return;
+      }
+
+      if (!document.getElementById('f-agree-terms').checked) {
+        msg.textContent = 'Нужно принять пользовательское соглашение.';
+        msg.className = 'form-msg error show';
+        return;
+      }
+
+      const res = smRegister(name, email, pass);
+      if (!res.ok) {
+        msg.textContent = res.error;
+        msg.className = 'form-msg error show';
+        return;
+      }
+
+      smUpdateUser(email, { acceptedTerms: true, acceptedTermsAt: Date.now() });
+
+      msg.textContent = 'Аккаунт создан! Переходим ко входу…';
+      msg.className = 'form-msg ok show';
+      setTimeout(function () { window.location.href = 'login.html'; }, 900);
+    });
+  });
+</script>
+</body>
+</html>

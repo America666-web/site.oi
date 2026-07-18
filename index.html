@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SiteMarket — готовые сайты под ключ | Купить готовый сайт</title>
+<meta name="description" content="Маркетплейс готовых сайтов: лендинги, магазины, портфолио и бизнес-сайты от проверенных соавторов. Купите готовый сайт с ZIP-архивом уже сегодня — без ожидания разработки с нуля.">
+<link rel="icon" href="logo.png">
+<link rel="preload" as="image" href="banner.webp" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><img src="logo.png" alt="SiteMarket" width="32" height="32" loading="eager" decoding="async"> Site<span class="dot">Market</span></a>
+    <nav class="nav" id="sm-nav"></nav>
+  </div>
+</header>
+
+<main class="main">
+
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Магазин готовых сайтов</div>
+        <h1>Не заказывай сайт<br>с нуля — <span class="stroke">купи готовый</span></h1>
+        <p>Лендинги, магазины и портфолио, собранные и проверенные заранее. Выбираешь, оплачиваешь, получаешь доступ в свой профиль — без долгих согласований с разработчиком.</p>
+        <div class="hero-actions">
+          <a href="#catalog" class="btn btn-primary">Смотреть каталог</a>
+          <a href="register.html" class="btn">Создать аккаунт</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><b id="stat-count">—</b><span>сайтов в каталоге</span></div>
+          <div class="stat"><b>24ч</b><span>на выдачу доступа</span></div>
+          <div class="stat"><b>6</b><span>категорий</span></div>
+        </div>
+      </div>
+      <img class="hero-banner" src="banner.webp" alt="Витрина сайтов" width="1200" height="360" loading="eager" decoding="async" fetchpriority="high">
+    </div>
+  </section>
+
+  <section class="section" id="catalog">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Каталог</div>
+          <h2>Выберите готовый сайт</h2>
+        </div>
+      </div>
+      <div class="filters" id="sm-filters"></div>
+      <div class="grid" id="sm-grid"><!-- SM-PRERENDER-START --><!-- SM-PRERENDER-END --></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Модалка превью -->
+<div class="modal-backdrop" id="sm-preview-backdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="sm-preview-close">&times;</button>
+    <div class="preview-layout" id="sm-preview-body"></div>
+  </div>
+</div>
+
+<!-- Модалка жалобы -->
+<div class="modal-backdrop" id="sm-report-backdrop">
+  <div class="modal" style="max-width:460px;">
+    <button class="modal-close" id="sm-report-close">&times;</button>
+    <h3 id="sm-report-title">Пожаловаться</h3>
+    <form id="sm-report-form">
+      <input type="hidden" id="sm-report-listing-id">
+      <div class="field">
+        <label>Причина</label>
+        <select id="sm-report-reason" style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);"></select>
+      </div>
+      <div class="field">
+        <label>Подробности (необязательно)</label>
+        <textarea id="sm-report-details" rows="3" placeholder="Опишите, что не так…" style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);resize:vertical;"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Отправить жалобу</button>
+      <div id="sm-report-msg" style="margin-top:8px;font-size:13px;text-align:center;"></div>
+    </form>
+  </div>
+</div>
+
+<!-- Модалка подтверждения покупки -->
+<div class="modal-backdrop" id="sm-purchase-backdrop">
+  <div class="modal" style="max-width:460px;">
+    <button class="modal-close" id="sm-purchase-close">&times;</button>
+    <div id="sm-purchase-body">
+      <div style="text-align:center;margin-bottom:12px;">
+        <span style="font-size:42px;">🛒</span>
+      </div>
+      <h3 style="text-align:center;">Подтверждение покупки</h3>
+      <p style="text-align:center;color:var(--text-dim);font-size:14px;" id="sm-purchase-desc">Вы уверены, что хотите купить этот сайт?</p>
+      <div style="background:var(--bg-alt);border-radius:var(--radius-md);padding:16px;margin:16px 0;border:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-weight:600;" id="sm-purchase-title">Название</span>
+          <span class="price" id="sm-purchase-price">0 ₽</span>
+        </div>
+        <div style="margin-top:6px;font-size:13px;color:var(--text-faint);" id="sm-purchase-category">Категория</div>
+      </div>
+      <div class="field" id="sm-purchase-policy-row" style="display:none;align-items:flex-start;gap:8px;margin:0 0 14px;">
+        <input type="checkbox" id="f-purchase-agree-policy" style="margin-top:3px;width:auto;">
+        <label for="f-purchase-agree-policy" style="font-size:13px;font-weight:400;">Я принимаю <a href="policy.html?type=purchase" target="_blank" style="color:var(--orange-2);">Политику покупки</a></label>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:8px;">
+        <button class="btn btn-block" id="sm-purchase-cancel">Отмена</button>
+        <button class="btn btn-primary btn-block" id="sm-purchase-confirm">✅ Подтвердить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 <span class="orange">SiteMarket</span> — демо-версия без сервера</span>
+    <span>Все данные хранятся локально в вашем браузере</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="storage.js"></script>
+<script src="firebase-sync.js"></script>
+<script src="auth.js"></script>
+<script src="upload.js"></script>
+<script src="sitecrypt.js"></script>
+<script src="zipviewer.js"></script>
+<script src="app.js"></script>
+<script src="particles.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    smRenderNav('home');
+    document.getElementById('stat-count').textContent = smGetPublicListings().length;
+  });
+</script>
+</body>
+</html>

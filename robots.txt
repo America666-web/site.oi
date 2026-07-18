@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /author.html
+Disallow: /author-dashboard.html
+Disallow: /profile.html
+Disallow: /policy.html
+
+Sitemap: https://ВАШ-ДОМЕН/sitemap.xml

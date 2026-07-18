@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Панель соавтора — SiteMarket</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><img src="logo.png" alt="SiteMarket" width="32" height="32" loading="eager" decoding="async"> Site<span class="dot">Market</span></a>
+    <nav class="nav" id="sm-nav"></nav>
+  </div>
+</header>
+
+<main class="main">
+  <div class="container section">
+    <div class="eyebrow">Панель соавтора</div>
+    <h2>Мои сайты</h2>
+
+    <div class="admin-stats" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 24px;">
+      <div class="admin-stat"><b id="author-total-sites">0</b><span>всего сайтов</span></div>
+      <div class="admin-stat"><b id="author-earnings">0 ₽</b><span>заработано</span></div>
+      <div class="admin-stat"><b id="author-sales">0</b><span>продано</span></div>
+    </div>
+
+    <button class="btn btn-primary" id="sm-author-add-site" style="margin-bottom: 16px;">+ Добавить сайт</button>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Название</th><th>Цена</th><th>Статус</th><th>Продано</th><th>Действия</th></tr>
+        </thead>
+        <tbody id="sm-author-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<div class="modal-backdrop" id="sm-author-modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" id="sm-author-modal-close">&times;</button>
+    <h3>Добавить сайт</h3>
+    <form id="sm-author-add-form">
+      <div class="field">
+        <label>Фото (не обязательно)</label>
+        <div class="upload-box">
+          <div class="upload-preview" id="sm-author-upload-preview"></div>
+          <div class="upload-actions">
+            <input type="file" id="f-author-image" accept="image/*">
+            <div class="upload-status" id="sm-author-upload-status"></div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>ZIP-архив с сайтом</label>
+        <div style="font-size:12px;color:var(--text-faint);margin-bottom:6px;">Максимум 700 КБ (архив со всеми файлами сайта в ZIP)</div>
+        <div class="upload-box" style="flex-direction:column;align-items:stretch;">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <input type="file" id="f-author-zip" accept=".zip">
+            <span id="sm-author-zip-filename" style="font-size:13px;color:var(--text-faint);"></span>
+          </div>
+          <div class="upload-status" id="sm-author-zip-status"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-author-title">Название</label>
+        <input id="f-author-title" type="text" required>
+      </div>
+      <div class="field">
+        <label for="f-author-category">Категория</label>
+        <select id="f-author-category">
+          <option value="Лендинг">Лендинг</option>
+          <option value="Магазин">Магазин</option>
+          <option value="Портфолио">Портфолио</option>
+          <option value="Бизнес">Бизнес</option>
+          <option value="Блог">Блог</option>
+          <option value="Другое">Другое</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-author-price">Цена, ₽</label>
+        <input id="f-author-price" type="number" min="0" step="100" required>
+      </div>
+      <div class="field">
+        <label for="f-author-badge">Метка</label>
+        <select id="f-author-badge">
+          <option value="">Нет</option>
+          <option value="Хит">Хит 🔥</option>
+          <option value="Популярное">Популярное ⭐</option>
+          <option value="VIP">VIP 💎</option>
+          <option value="Новинка">Новинка 🆕</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-author-desc">Описание</label>
+        <textarea id="f-author-desc" rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-author-details">Подробности</label>
+        <textarea id="f-author-details" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Отправить на модерацию</button>
+    </form>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 <span class="orange">SiteMarket</span></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="storage.js"></script>
+<script src="firebase-sync.js"></script>
+<script src="auth.js"></script>
+<script src="upload.js"></script>
+<script src="sitecrypt.js"></script>
+<script src="zipviewer.js"></script>
+<script src="app.js"></script>
+<script src="author.js"></script>
+</body>
+</html>

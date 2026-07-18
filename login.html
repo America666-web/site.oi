@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вход — SiteMarket</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><img src="logo.png" alt="SiteMarket" width="32" height="32" loading="eager" decoding="async"> Site<span class="dot">Market</span></a>
+    <nav class="nav" id="sm-nav"></nav>
+  </div>
+</header>
+
+<main class="main auth-wrap">
+  <div class="auth-card">
+    <h1>С возвращением</h1>
+    <p class="auth-sub">Войдите, чтобы покупать сайты и видеть свой профиль</p>
+
+    <div id="sm-msg" class="form-msg error"></div>
+
+    <form id="sm-login-form">
+      <div class="field">
+        <label for="f-login">Email или логин</label>
+        <input id="f-login" type="text" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="f-pass">Пароль</label>
+        <input id="f-pass" type="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Войти</button>
+    </form>
+
+    <p class="auth-foot">Нет аккаунта? <a href="register.html">Зарегистрироваться</a></p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 <span class="orange">SiteMarket</span></span>
+  </div>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="storage.js"></script>
+<script src="firebase-sync.js"></script>
+<script src="auth.js"></script>
+<script src="app.js"></script>
+<script src="particles.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    smRenderNav('login');
+
+    document.getElementById('sm-login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const login = document.getElementById('f-login').value;
+      const pass = document.getElementById('f-pass').value;
+      const res = smLogin(login, pass);
+      const msg = document.getElementById('sm-msg');
+
+      if (!res.ok) {
+        msg.textContent = res.error;
+        msg.className = 'form-msg error show';
+        return;
+      }
+
+      window.location.href = res.role === 'admin' || res.role === 'owner' ? 'admin.html' : 'profile.html';
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Разработчики — SiteMarket</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><img src="logo.png" alt="SiteMarket" width="32" height="32" loading="eager" decoding="async"> Site<span class="dot">Market</span></a>
+    <nav class="nav" id="sm-nav"></nav>
+  </div>
+</header>
+
+<main class="main">
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Команда</div>
+          <h2>Наши разработчики</h2>
+        </div>
+        <button class="btn btn-primary" id="sm-join-btn">Вступить в ряды</button>
+      </div>
+      <div class="grid" id="dev-grid"></div>
+    </div>
+  </section>
+</main>
+
+<!-- Модалка заявки -->
+<div class="modal-backdrop" id="sm-application-backdrop">
+  <div class="modal">
+    <button class="modal-close" id="sm-app-close">&times;</button>
+    <h3>Заявка на вступление</h3>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;">Заполните форму, чтобы стать соавтором SiteMarket.</p>
+    <form id="sm-app-form">
+      <div class="field">
+        <label for="f-app-github">GitHub (обязательно)</label>
+        <input id="f-app-github" type="url" required placeholder="https://github.com/username">
+      </div>
+      <div class="field">
+        <label for="f-app-email">Email (обязательно)</label>
+        <input id="f-app-email" type="email" required placeholder="your@email.com">
+      </div>
+      <div class="field">
+        <label for="f-app-phone">Телефон (обязательно)</label>
+        <input id="f-app-phone" type="tel" required placeholder="+7 (900) 123-45-67">
+      </div>
+      <div class="field">
+        <label for="f-app-message">Почему вы хотите стать соавтором?</label>
+        <textarea id="f-app-message" rows="4" required placeholder="Расскажите о себе и своём опыте..."></textarea>
+      </div>
+      <div class="field" style="display:flex;align-items:flex-start;gap:8px;">
+        <input type="checkbox" id="f-app-agree-terms" style="margin-top:3px;width:auto;">
+        <label for="f-app-agree-terms" style="font-size:13px;font-weight:400;">Я принимаю <a href="policy.html?type=authorTerms" target="_blank" style="color:var(--orange-2);">Соглашение соавтора</a></label>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:12px;">
+        <button type="button" class="btn btn-block" id="sm-app-cancel">Отмена</button>
+        <button type="submit" class="btn btn-primary btn-block">Отправить заявку</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 <span class="orange">SiteMarket</span></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="storage.js"></script>
+<script src="firebase-sync.js"></script>
+<script src="auth.js"></script>
+<script src="upload.js"></script>
+<script src="sitecrypt.js"></script>
+<script src="zipviewer.js"></script>
+<script src="app.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    smRenderNav('developers');
+    const grid = document.getElementById('dev-grid');
+    const devs = smGetDevelopers();
+    if (!devs.length) {
+      grid.innerHTML = '<div class="empty">Пока нет разработчиков в команде.</div>';
+    } else {
+      grid.innerHTML = devs.map(function(d) {
+        return `
+          <div class="site-card" style="align-items:center;text-align:center;padding:20px;">
+            <div style="width:120px;height:120px;border-radius:50%;overflow:hidden;margin-bottom:12px;background:var(--bg-secondary);border:2px solid var(--accent);">
+              ${d.photo ? '<img src="'+d.photo+'" style="width:100%;height:100%;object-fit:cover;">' : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:700;color:var(--accent);">'+d.name.charAt(0).toUpperCase()+'</div>'}
+            </div>
+            <h3>${smEsc(d.name)}</h3>
+            <p>${smEsc(d.description)}</p>
+            <div class="price" style="font-size:18px;margin-top:6px;">${d.sitesCount || 0}+ сайтов</div>
+          </div>
+        `;
+      }).join('');
+    }
+  });
+</script>
+</body>
+</html>

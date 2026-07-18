@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Админ-панель — SiteMarket</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><img src="logo.png" alt="SiteMarket" width="32" height="32" loading="eager" decoding="async"> Site<span class="dot">Market</span></a>
+    <nav class="nav" id="sm-nav"></nav>
+  </div>
+</header>
+
+<main class="main">
+  <div class="admin-shell">
+
+    <aside class="admin-side">
+      <h3>Управление</h3>
+      <button class="btn btn-primary btn-block" id="sm-open-modal">+ Добавить сайт</button>
+      <button class="btn btn-block" id="sm-open-user-modal" style="margin-top:4px;">+ Создать пользователя</button>
+      <button class="btn btn-block" id="sm-open-dev-modal" style="margin-top:4px;">👨‍💻 Разработчики</button>
+      <button class="btn btn-block" id="sm-open-applications">📩 Заявки</button>
+      <button class="btn btn-block" id="sm-open-moderation">🔍 Модерация</button>
+      <button class="btn btn-block" id="sm-open-support">💬 Поддержка <span id="sm-support-badge" class="badge-count" style="display:none;"></span></button>
+      <button class="btn btn-block" id="sm-open-review">⚠️ Проверка <span id="sm-review-badge" class="badge-count" style="display:none;"></span></button>
+      <button class="btn btn-block" id="sm-open-policies">📄 Политики</button>
+      <button class="btn btn-block" id="sm-toggle-applications">🔒 Закрыть заявки</button>
+      <button class="btn btn-block" id="sm-open-promo-section" style="display:none;">🎫 Промокоды</button>
+      <button class="btn btn-block" id="sm-open-pass-section">🔑 Сменить пароль</button>
+      <button class="btn btn-block" id="sm-open-settings">⚙️ Настройки</button>
+      <hr style="border-color:var(--border);margin:12px 0;">
+      <a href="index.html" class="btn btn-block">Смотреть витрину</a>
+    </aside>
+
+    <section class="admin-main">
+      <div class="eyebrow">Админ-панель</div>
+      <h2>Панель управления</h2>
+
+      <div class="admin-stats">
+        <div class="admin-stat"><b id="stat-listings">0</b><span>товаров в каталоге</span></div>
+        <div class="admin-stat"><b id="stat-users">0</b><span>зарегистрированных пользователей</span></div>
+        <div class="admin-stat"><b id="stat-sales">0</b><span>покупок совершено</span></div>
+      </div>
+
+      <div class="admin-pass-section" id="sm-pass-section" style="display:none; margin-bottom:20px; padding:16px; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--surface);">
+        <h4 style="font-size:14px;margin-bottom:8px;">Сменить пароль</h4>
+        <form id="sm-admin-pass-form" style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;">
+          <div class="field" style="margin-bottom:0;flex:1;min-width:150px;">
+            <label style="font-size:12px;">Текущий пароль</label>
+            <input type="password" id="f-admin-old-pass" style="padding:8px 10px;font-size:13px;">
+          </div>
+          <div class="field" style="margin-bottom:0;flex:1;min-width:150px;">
+            <label style="font-size:12px;">Новый пароль</label>
+            <input type="password" id="f-admin-new-pass" style="padding:8px 10px;font-size:13px;" minlength="4">
+          </div>
+          <button type="submit" class="btn btn-primary" style="padding:8px 16px;font-size:13px;">Изменить</button>
+        </form>
+        <div id="sm-admin-pass-msg" class="form-msg" style="margin-top:8px;"></div>
+      </div>
+
+      <div class="admin-promo-section" id="sm-promo-section" style="display:none; margin:20px 0; padding:16px; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--surface);">
+        <h4 style="font-size:14px;margin-bottom:8px;">Создать промокод</h4>
+        <form id="sm-promo-form" style="display:flex;flex-wrap:wrap;gap:10px;align-items:end;">
+          <div class="field" style="margin-bottom:0;flex:1 1 120px;">
+            <label style="font-size:12px;">Код</label>
+            <input type="text" id="f-promo-code" placeholder="SUMMER2024" style="padding:6px 10px;font-size:13px;width:100%;">
+          </div>
+          <div class="field" style="margin-bottom:0;flex:1 1 100px;">
+            <label style="font-size:12px;">Тип</label>
+            <select id="f-promo-type" style="padding:6px 10px;font-size:13px;width:100%;">
+              <option value="percent">Скидка %</option>
+              <option value="balance">На баланс</option>
+            </select>
+          </div>
+          <div class="field" style="margin-bottom:0;flex:1 1 100px;">
+            <label style="font-size:12px;">Значение</label>
+            <input type="number" id="f-promo-value" placeholder="10" style="padding:6px 10px;font-size:13px;width:100%;">
+          </div>
+          <div class="field" style="margin-bottom:0;flex:1 1 80px;">
+            <label style="font-size:12px;">Использований</label>
+            <input type="number" id="f-promo-uses" value="1" style="padding:6px 10px;font-size:13px;width:100%;">
+          </div>
+          <div class="field" style="margin-bottom:0;flex:1 1 120px;">
+            <label style="font-size:12px;">Действует до</label>
+            <input type="date" id="f-promo-expires" style="padding:6px 10px;font-size:13px;width:100%;">
+          </div>
+          <button type="submit" class="btn btn-primary" style="padding:6px 16px;font-size:13px;">Создать</button>
+        </form>
+        <div id="sm-promocodes-list" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="admin-settings-section" id="sm-settings-section" style="display:none; margin-bottom:20px; padding:16px; border:1px solid var(--border); border-radius:var(--radius-md); background:var(--surface);">
+        <h4 style="font-size:14px;margin-bottom:8px;">Настройки платформы</h4>
+        <div class="field" style="display:flex;gap:10px;align-items:end;">
+          <div style="flex:1;">
+            <label style="font-size:12px;">Комиссия платформы (%)</label>
+            <input type="number" id="sm-commission-rate" value="10" min="0" max="100" style="padding:8px 10px;font-size:13px;width:100%;">
+          </div>
+          <button class="btn btn-primary" id="sm-save-settings" style="padding:8px 16px;">Сохранить</button>
+        </div>
+      </div>
+
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="catalog">Каталог сайтов</button>
+        <button class="admin-tab" data-tab="users">Пользователи</button>
+      </div>
+
+      <div class="admin-panel active" id="panel-catalog">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th></th><th>Название</th><th>Категория</th><th>Цена</th><th>Бейдж</th><th>ZIP/Статус</th><th>Действия</th></tr>
+            </thead>
+            <tbody id="sm-admin-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="admin-panel" id="panel-users">
+        <div class="admin-tools">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="number" id="sm-uid-search" placeholder="ID пользователя">
+            <button class="btn" id="sm-uid-search-btn">Найти</button>
+          </div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn user-filter-btn active" data-filter="active">Активные</button>
+            <button class="btn user-filter-btn" data-filter="banned">Забаненные</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Имя</th><th>Email</th><th>Баланс</th><th>Покупок</th><th>Роль</th><th>Права</th><th>Статус</th><th>Действия</th></tr>
+            </thead>
+            <tbody id="sm-users-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Модалки -->
+<div class="modal-backdrop" id="sm-modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" id="sm-close-modal">&times;</button>
+    <h3 id="sm-modal-title">Новый сайт в каталог</h3>
+    <form id="sm-add-form">
+      <input type="hidden" id="f-edit-id" value="">
+      <div class="field">
+        <label>Фото сайта (не обязательно)</label>
+        <div class="upload-box">
+          <div class="upload-preview" id="sm-upload-preview"></div>
+          <div class="upload-actions">
+            <input type="file" id="f-image" accept="image/*">
+            <div class="upload-status" id="sm-upload-status"></div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>ZIP-архив с сайтом</label>
+        <div style="font-size:12px;color:var(--text-faint);margin-bottom:6px;">Максимум 700 КБ (архив со всеми файлами сайта в ZIP)</div>
+        <div class="upload-box" style="flex-direction:column;align-items:stretch;">
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <input type="file" id="f-zip" accept=".zip">
+            <span id="sm-zip-filename" style="font-size:13px;color:var(--text-faint);"></span>
+          </div>
+          <div class="upload-status" id="sm-zip-status"></div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-title">Название</label>
+        <input id="f-title" type="text" required>
+      </div>
+      <div class="field">
+        <label for="f-category">Категория</label>
+        <select id="f-category">
+          <option value="Лендинг">Лендинг</option>
+          <option value="Магазин">Магазин</option>
+          <option value="Портфолио">Портфолио</option>
+          <option value="Бизнес">Бизнес</option>
+          <option value="Блог">Блог</option>
+          <option value="Другое">Другое</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-price">Цена, ₽</label>
+        <input id="f-price" type="number" min="0" step="100" required>
+      </div>
+      <div class="field">
+        <label for="f-badge">Метка</label>
+        <select id="f-badge">
+          <option value="">Нет</option>
+          <option value="Хит">Хит 🔥</option>
+          <option value="Популярное">Популярное ⭐</option>
+          <option value="VIP">VIP 💎</option>
+          <option value="Новинка">Новинка 🆕</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-desc">Описание</label>
+        <textarea id="f-desc" rows="2"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-details">Подробности</label>
+        <textarea id="f-details" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-user-modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" id="sm-user-modal-close">&times;</button>
+    <h3 id="sm-user-modal-title">Создать пользователя</h3>
+    <form id="sm-user-form">
+      <input type="hidden" id="fu-edit-email" value="">
+      <div class="field">
+        <label for="fu-name">Имя</label>
+        <input id="fu-name" type="text" required>
+      </div>
+      <div class="field">
+        <label for="fu-email">Email</label>
+        <input id="fu-email" type="email" required>
+      </div>
+      <div class="field" id="fu-pass-field">
+        <label for="fu-pass">Пароль</label>
+        <input id="fu-pass" type="password" minlength="4" required>
+      </div>
+      <div class="field">
+        <label for="fu-role">Роль</label>
+        <select id="fu-role">
+          <option value="user">Пользователь</option>
+          <option value="admin">Администратор</option>
+        </select>
+      </div>
+      <div id="fu-permissions-block" style="display:none; border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px; margin-top:10px;">
+        <label style="display:block; margin-bottom:8px; font-weight:600;">Права администратора:</label>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+          <label><input type="checkbox" class="fu-perm" value="add_listings"> Добавление сайтов</label>
+          <label><input type="checkbox" class="fu-perm" value="edit_listings"> Редактирование сайтов</label>
+          <label><input type="checkbox" class="fu-perm" value="delete_listings"> Удаление сайтов</label>
+          <label><input type="checkbox" class="fu-perm" value="manage_users"> Управление пользователями</label>
+          <label><input type="checkbox" class="fu-perm" value="ban_users"> Блокировка пользователей</label>
+          <label><input type="checkbox" class="fu-perm" value="manage_roles"> Назначение администраторов</label>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-ban-modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" id="sm-ban-modal-close">&times;</button>
+    <h3>Блокировка пользователя</h3>
+    <form id="sm-ban-form">
+      <input type="hidden" id="sm-ban-email" value="">
+      <div class="field">
+        <label>Причина блокировки</label>
+        <select id="sm-ban-reason">
+          <option value="spam">Спам</option>
+          <option value="abuse">Оскорбления</option>
+          <option value="fraud">Мошенничество</option>
+          <option value="other">Другое</option>
+        </select>
+      </div>
+      <div class="field" id="sm-ban-custom-block" style="display:none;">
+        <label for="sm-ban-custom-reason">Ваша причина</label>
+        <input type="text" id="sm-ban-custom-reason">
+      </div>
+      <div class="field">
+        <label>Срок блокировки</label>
+        <select id="sm-ban-duration">
+          <option value="7">7 дней</option>
+          <option value="14">14 дней</option>
+          <option value="30">30 дней</option>
+          <option value="forever">Навсегда</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:12px;">
+        <button type="button" class="btn btn-block" id="sm-ban-cancel">Отмена</button>
+        <button type="button" class="btn btn-danger btn-block" id="sm-ban-confirm">Заблокировать</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-dev-modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" id="sm-dev-modal-close">&times;</button>
+    <h3 id="sm-dev-modal-title">Управление разработчиками</h3>
+    <div id="sm-dev-list"></div>
+    <hr style="border-color:var(--border);margin:16px 0;">
+    <h4>Добавить разработчика</h4>
+    <form id="sm-dev-form">
+      <div class="field">
+        <label>Фото</label>
+        <div class="upload-box">
+          <div class="upload-preview" id="sm-dev-upload-preview"></div>
+          <div class="upload-actions">
+            <input type="file" id="f-dev-photo" accept="image/*">
+            <div class="upload-status" id="sm-dev-upload-status"></div>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-dev-name">Имя</label>
+        <input id="f-dev-name" type="text" required>
+      </div>
+      <div class="field">
+        <label for="f-dev-desc">Описание</label>
+        <textarea id="f-dev-desc" rows="3"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-dev-sites">Количество сайтов</label>
+        <input id="f-dev-sites" type="number" value="0" min="0">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Добавить</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-applications-backdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="sm-applications-close">&times;</button>
+    <h3>Заявки на вступление</h3>
+    <div id="sm-applications-list"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-moderation-backdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="sm-moderation-close">&times;</button>
+    <h3>Модерация сайтов</h3>
+    <div id="sm-moderation-list"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-history-backdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="sm-history-close">&times;</button>
+    <h3 id="sm-history-title">История покупок</h3>
+    <div id="sm-history-body" style="max-height:60vh;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-support-backdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="sm-support-close">&times;</button>
+    <h3>Чат поддержки</h3>
+    <div style="display:flex;gap:16px;max-height:65vh;">
+      <div id="sm-support-threads" style="width:230px;flex-shrink:0;overflow-y:auto;border-right:1px solid var(--border);padding-right:12px;"></div>
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+        <div id="sm-support-chat-title" style="font-weight:600;margin-bottom:8px;color:var(--text-faint);">Выберите диалог слева</div>
+        <div id="sm-support-messages" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px;"></div>
+        <form id="sm-support-reply-form" style="display:none;gap:8px;margin-top:10px;align-items:center;">
+          <label for="f-support-admin-image" class="btn" style="padding:8px 10px;cursor:pointer;margin:0;" title="Прикрепить фото">📎</label>
+          <input type="file" id="f-support-admin-image" accept="image/*" style="display:none;">
+          <input type="text" id="sm-support-reply-input" placeholder="Ответить…" style="flex:1;padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--text);" autocomplete="off">
+          <button type="submit" class="btn btn-primary">Отправить</button>
+        </form>
+        <div id="sm-support-admin-image-status" style="font-size:12px;color:var(--text-faint);"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-review-backdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="sm-review-close">&times;</button>
+    <h3>Проверка</h3>
+    <div style="display:flex;gap:8px;margin-bottom:16px;">
+      <button class="btn review-tab-btn active" data-tab="accounts" id="sm-review-tab-accounts">Подозрительные аккаунты</button>
+      <button class="btn review-tab-btn" data-tab="reports" id="sm-review-tab-reports">Жалобы на товары</button>
+    </div>
+    <div id="sm-review-accounts"></div>
+    <div id="sm-review-reports" style="display:none;"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="sm-policies-backdrop">
+  <div class="modal modal-wide">
+    <button class="modal-close" id="sm-policies-close">&times;</button>
+    <h3>Политики</h3>
+    <p style="color:var(--text-faint);font-size:13px;margin-top:-6px;">Можно писать HTML-разметку (заголовки, абзацы, ссылки) — она отобразится как есть на отдельной странице.</p>
+    <div class="field">
+      <label>Пользовательское соглашение (при регистрации)</label>
+      <textarea id="sm-policy-userTerms" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:monospace;font-size:13px;"></textarea>
+    </div>
+    <div class="field">
+      <label>Соглашение соавтора (при подаче заявки)</label>
+      <textarea id="sm-policy-authorTerms" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:monospace;font-size:13px;"></textarea>
+    </div>
+    <div class="field">
+      <label>Политика покупки (при первой покупке)</label>
+      <textarea id="sm-policy-purchase" rows="6" style="width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:monospace;font-size:13px;"></textarea>
+    </div>
+    <button class="btn btn-primary btn-block" id="sm-policies-save">Сохранить</button>
+    <div id="sm-policies-msg" style="margin-top:8px;font-size:13px;text-align:center;color:var(--success);"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="storage.js"></script>
+<script src="firebase-sync.js"></script>
+<script src="auth.js"></script>
+<script src="upload.js"></script>
+<script src="sitecrypt.js"></script>
+<script src="zipviewer.js"></script>
+<script src="app.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
